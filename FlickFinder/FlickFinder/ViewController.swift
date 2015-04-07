@@ -25,6 +25,8 @@ class ViewController: UIViewController {
     @IBOutlet weak var latitudeTextField: UITextField!
     @IBOutlet weak var longitudeTextField: UITextField!
 
+    var tapRecognizer: UITapGestureRecognizer? = nil
+    
     @IBAction func searchPhotosByPhraseButtonTouchUp(sender: AnyObject) {
         let methodArguments = [
             "method": METHOD_NAME,
@@ -44,15 +46,62 @@ class ViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        println("Initialize the tapRecognizer in viewDidLoad")
     }
     
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
+        
+        println("Add the tapRecognizer and subscribe to keyboard notifications in viewWillAppear")
     }
-
+    
     override func viewWillDisappear(animated: Bool) {
         super.viewWillDisappear(animated)
+        
+        println("Remove the tapRecognizer and unsubscribe from keyboard notifications in viewWillDisappear")
     }
+    
+    /* ============================================================
+    * Functional stubs for handling UI problems
+    * ============================================================ */
+    
+    /* 1 - Dismissing the keyboard */
+    func addKeyboardDismissRecognizer() {
+        println("Add the recognizer to dismiss the keyboard")
+    }
+    
+    func removeKeyboardDismissRecognizer() {
+        println("Remove the recognizer to dismiss the keyboard")
+    }
+    
+    func handleSingleTap(recognizer: UITapGestureRecognizer) {
+        println("End editing here")
+    }
+    
+    /* 2 - Shifting the keyboard so it does not hide controls */
+    func subscribeToKeyboardNotifications() {
+        println("Subscribe to the KeyboardWillShow and KeyboardWillHide notifications")
+    }
+    
+    func unsubscribeToKeyboardNotifications() {
+        println("Unsubscribe to the KeyboardWillShow and KeyboardWillHide notifications")
+    }
+    
+    func keyboardWillShow(notification: NSNotification) {
+        println("Shift the view's frame up so that controls are shown")
+    }
+    
+    func keyboardWillHide(notification: NSNotification) {
+        println("Shift the view's frame down so that the view is back to its original placement")
+    }
+    
+    func getKeyboardHeight(notification: NSNotification) -> CGFloat {
+        println("Get and return the keyboard's height from the notification")
+        return 0.0
+    }
+    
+    /* ============================================================ */
     
     func getImageFromFlickrBySearch(methodArguments: [String : AnyObject]) {
         
@@ -93,7 +142,9 @@ class ViewController: UIViewController {
                             /* 6 - Update the UI on the main thread */
                             if let imageData = NSData(contentsOfURL: imageURL!) {
                                 dispatch_async(dispatch_get_main_queue(), {
-                                    println("Success, update the UI here...")
+                                    self.defaultLabel.alpha = 0.0
+                                    self.photoImageView.image = UIImage(data: imageData)
+                                    self.photoTitleLabel.text = "\(photoTitle!)"
                                 })
                             } else {
                                 println("Image does not exist at \(imageURL)")
@@ -103,7 +154,9 @@ class ViewController: UIViewController {
                         }
                     } else {
                         dispatch_async(dispatch_get_main_queue(), {
-                            println("Failure, update the UI here...")
+                            self.photoTitleLabel.text = "No Photos Found. Search Again."
+                            self.defaultLabel.alpha = 1.0
+                            self.photoImageView.image = nil
                         })
                     }
                 } else {
@@ -112,7 +165,7 @@ class ViewController: UIViewController {
             }
         }
         
-        /* 6 - Resume (execute) the task */
+        /* 7 - Resume (execute) the task */
         task.resume()
     }
     
