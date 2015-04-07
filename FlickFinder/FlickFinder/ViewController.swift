@@ -22,6 +22,12 @@ let LAT_MAX = 90.0
 let LON_MIN = -180.0
 let LON_MAX = 180.0
 
+extension String {
+    func toDouble() -> Double? {
+        return NSNumberFormatter().numberFromString(self)?.doubleValue
+    }
+}
+
 class ViewController: UIViewController {
 
     @IBOutlet weak var photoImageView: UIImageView!
@@ -38,16 +44,21 @@ class ViewController: UIViewController {
         /* Added from student request -- hides keyboard after searching */
         self.dismissAnyVisibleKeyboards()
         
-        let methodArguments = [
-            "method": METHOD_NAME,
-            "api_key": API_KEY,
-            "text": self.phraseTextField.text,
-            "safe_search": SAFE_SEARCH,
-            "extras": EXTRAS,
-            "format": DATA_FORMAT,
-            "nojsoncallback": NO_JSON_CALLBACK
-        ]
-        getImageFromFlickrBySearch(methodArguments)
+        if !self.phraseTextField.text.isEmpty {
+            self.photoTitleLabel.text = "Searching..."
+            let methodArguments = [
+                "method": METHOD_NAME,
+                "api_key": API_KEY,
+                "text": self.phraseTextField.text,
+                "safe_search": SAFE_SEARCH,
+                "extras": EXTRAS,
+                "format": DATA_FORMAT,
+                "nojsoncallback": NO_JSON_CALLBACK
+            ]
+            getImageFromFlickrBySearch(methodArguments)
+        } else {
+            self.photoTitleLabel.text = "Phrase Empty."
+        }
     }
     
     @IBAction func searchPhotosByLatLonButtonTouchUp(sender: AnyObject) {
@@ -55,16 +66,37 @@ class ViewController: UIViewController {
         /* Added from student request -- hides keyboard after searching */
         self.dismissAnyVisibleKeyboards()
         
-        let methodArguments = [
-            "method": METHOD_NAME,
-            "api_key": API_KEY,
-            "bbox": createBoundingBoxString(),
-            "safe_search": SAFE_SEARCH,
-            "extras": EXTRAS,
-            "format": DATA_FORMAT,
-            "nojsoncallback": NO_JSON_CALLBACK
-        ]
-        getImageFromFlickrBySearch(methodArguments)
+        if !self.latitudeTextField.text.isEmpty && !self.longitudeTextField.text.isEmpty {
+            if validLatitude() && validLongitude() {
+                self.photoTitleLabel.text = "Searching..."
+                let methodArguments = [
+                    "method": METHOD_NAME,
+                    "api_key": API_KEY,
+                    "bbox": createBoundingBoxString(),
+                    "safe_search": SAFE_SEARCH,
+                    "extras": EXTRAS,
+                    "format": DATA_FORMAT,
+                    "nojsoncallback": NO_JSON_CALLBACK
+                ]
+                getImageFromFlickrBySearch(methodArguments)
+            } else {
+                if !validLatitude() && !validLongitude() {
+                    self.photoTitleLabel.text = "Lat/Lon Invalid.\nLat should be [-90, 90].\nLon should be [-180, 180]."
+                } else if !validLatitude() {
+                    self.photoTitleLabel.text = "Lat Invalid.\nLat should be [-90, 90]."
+                } else {
+                    self.photoTitleLabel.text = "Lon Invalid.\nLon should be [-180, 180]."
+                }
+            }
+        } else {
+            if self.latitudeTextField.text.isEmpty && self.longitudeTextField.text.isEmpty {
+                self.photoTitleLabel.text = "Lat/Lon Empty."
+            } else if self.latitudeTextField.text.isEmpty {
+                self.photoTitleLabel.text = "Lat Empty."
+            } else {
+                self.photoTitleLabel.text = "Lon Empty."
+            }
+        }
     }
     
     override func viewDidLoad() {
@@ -155,6 +187,30 @@ class ViewController: UIViewController {
         return "\(bottom_left_lon),\(bottom_left_lat),\(top_right_lon),\(top_right_lat)"
     }
 
+    /* Check to make sure the latitude falls within [-90, 90] */
+    func validLatitude() -> Bool {
+        if let latitude : Double? = self.latitudeTextField.text.toDouble() {
+            if latitude < LAT_MIN || latitude > LAT_MAX {
+                return false
+            }
+        } else {
+            return false
+        }
+        return true
+    }
+    
+    /* Check to make sure the longitude falls within [-180, 180] */
+    func validLongitude() -> Bool {
+        if let longitude : Double? = self.longitudeTextField.text.toDouble() {
+            if longitude < LON_MIN || longitude > LON_MAX {
+                return false
+            }
+        } else {
+            return false
+        }
+        return true
+    }
+    
     func getLatLonString() -> String {
         let latitude = (self.latitudeTextField.text as NSString).doubleValue
         let longitude = (self.longitudeTextField.text as NSString).doubleValue
