@@ -15,8 +15,8 @@ struct Movie {
     var posterPath: String? = nil
       
     init(dictionary: [String : AnyObject]) {
-        title = dictionary["title"] as String
-        id = dictionary["id"] as Int
+        title = dictionary["title"] as! String
+        id = dictionary["id"] as! Int
         posterPath = dictionary["poster_path"] as? String
     }
     

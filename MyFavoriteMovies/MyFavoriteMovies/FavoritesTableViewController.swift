@@ -21,7 +21,7 @@ class FavoritesTableViewController: UITableViewController {
         super.viewDidLoad()
         
         /* Get the app delegate */
-        appDelegate = UIApplication.sharedApplication().delegate as AppDelegate
+        appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
         
         /* Get the shared URL session */
         session = NSURLSession.sharedSession()
@@ -53,16 +53,16 @@ class FavoritesTableViewController: UITableViewController {
         /* 4. Make the request */
         let task = session.dataTaskWithRequest(request) {data, response, downloadError in
             
-            if let error = downloadError? {
+            if let error = downloadError {
                 println("Could not complete the request \(error)")
             } else {
                 
                 /* 5. Parse the data */
                 var parsingError: NSError? = nil
-                let parsedResult = NSJSONSerialization.JSONObjectWithData(data, options: NSJSONReadingOptions.AllowFragments, error: &parsingError) as NSDictionary
+                let parsedResult = NSJSONSerialization.JSONObjectWithData(data, options: NSJSONReadingOptions.AllowFragments, error: &parsingError) as! NSDictionary
                 
                 /* 6. Use the data! */
-                if let error = parsingError? {
+                if let error = parsingError {
                     println("Could not parse the data \(error)")
                 } else {
                     if let results = parsedResult["results"] as? [[String : AnyObject]] {
@@ -88,7 +88,7 @@ class FavoritesTableViewController: UITableViewController {
         /* Get cell type */
         let cellReuseIdentifier = "FavoriteTableViewCell"
         let movie = movies[indexPath.row]
-        var cell = tableView.dequeueReusableCellWithIdentifier(cellReuseIdentifier) as UITableViewCell
+        var cell = tableView.dequeueReusableCellWithIdentifier(cellReuseIdentifier) as! UITableViewCell
         
         /* Set cell defaults */
         cell.textLabel!.text = movie.title
@@ -96,7 +96,7 @@ class FavoritesTableViewController: UITableViewController {
         cell.imageView!.contentMode = UIViewContentMode.ScaleAspectFit
         
         /* TASK: Get the poster image, then populate the image view */
-        if let posterPath = movie.posterPath? {
+        if let posterPath = movie.posterPath {
             
             /* 1. Set the parameters */
             // There are none...
@@ -111,7 +111,7 @@ class FavoritesTableViewController: UITableViewController {
             /* 4. Make the request */
             let task = session.dataTaskWithRequest(request) {data, response, downloadError in
                 
-                if let error = downloadError? {
+                if let error = downloadError {
                     println(error)
                 } else {
                     
@@ -119,7 +119,7 @@ class FavoritesTableViewController: UITableViewController {
                     // No need, the data is already raw image data.
                     
                     /* 6. Use the data! */
-                    if let image = UIImage(data: data!)? {
+                    if let image = UIImage(data: data!) {
                         dispatch_async(dispatch_get_main_queue()) {
                             cell.imageView!.image = image
                         }
@@ -142,7 +142,7 @@ class FavoritesTableViewController: UITableViewController {
     override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         
         /* Push the movie detail view */
-        let controller = self.storyboard!.instantiateViewControllerWithIdentifier("MovieDetailViewController") as MovieDetailViewController
+        let controller = self.storyboard!.instantiateViewControllerWithIdentifier("MovieDetailViewController") as! MovieDetailViewController
         controller.movie = movies[indexPath.row]
         self.navigationController!.pushViewController(controller, animated: true)
     }

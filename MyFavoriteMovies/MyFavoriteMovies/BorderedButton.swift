@@ -28,8 +28,8 @@ class BorderedButton: UIButton {
         self.themeBorderedButton()
     }
     
-    override init() {
-        super.init()
+    override init(frame: CGRect) {
+        super.init(frame: frame)
         self.themeBorderedButton()
     }
     
@@ -46,14 +46,14 @@ class BorderedButton: UIButton {
     
     // MARK: - Setters
     
-    func setBackingColor(backingColor : UIColor) -> Void {
-        if (self.backingColor? != nil) {
+    private func setBackingColor(backingColor : UIColor) -> Void {
+        if (self.backingColor != nil) {
             self.backingColor = backingColor;
             self.backgroundColor = backingColor;
         }
     }
     
-    func setHighlightedBackingColor(highlightedBackingColor: UIColor) -> Void {
+    private func setHighlightedBackingColor(highlightedBackingColor: UIColor) -> Void {
         self.highlightedBackingColor = highlightedBackingColor
         self.backingColor = highlightedBackingColor
     }

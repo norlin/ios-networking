@@ -32,7 +32,7 @@ class LoginViewController: UIViewController {
         super.viewDidLoad()
         
         /* Get the app delegate */
-        appDelegate = UIApplication.sharedApplication().delegate as AppDelegate
+        appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
         
         /* Get the shared URL session */
         session = NSURLSession.sharedSession()
@@ -98,7 +98,7 @@ class LoginViewController: UIViewController {
     func completeLogin() {
         dispatch_async(dispatch_get_main_queue(), {
             self.debugTextLabel.text = ""
-            let controller = self.storyboard!.instantiateViewControllerWithIdentifier("MoviesTabBarController") as UITabBarController
+            let controller = self.storyboard!.instantiateViewControllerWithIdentifier("MoviesTabBarController") as! UITabBarController
             self.presentViewController(controller, animated: true, completion: nil)
         })
     }
@@ -125,7 +125,7 @@ class LoginViewController: UIViewController {
         /* 4. Make the request */
         let task = session.dataTaskWithRequest(request) { data, response, downloadError in
             
-            if let error = downloadError? {
+            if let error = downloadError {
                 println("getRequestToken: Print an error message")
             } else {
                 
@@ -263,7 +263,7 @@ extension LoginViewController {
     
     func getKeyboardHeight(notification: NSNotification) -> CGFloat {
         let userInfo = notification.userInfo
-        let keyboardSize = userInfo![UIKeyboardFrameEndUserInfoKey] as NSValue // of CGRect
+        let keyboardSize = userInfo![UIKeyboardFrameEndUserInfoKey] as! NSValue // of CGRect
         return keyboardSize.CGRectValue().height
     }
 }

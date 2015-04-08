@@ -19,7 +19,7 @@ import Foundation
 
 // MARK: - File Support
 
-private let _documentsDirectoryURL: NSURL = NSFileManager.defaultManager().URLsForDirectory(.DocumentDirectory, inDomains: .UserDomainMask).first as NSURL
+private let _documentsDirectoryURL: NSURL = NSFileManager.defaultManager().URLsForDirectory(.DocumentDirectory, inDomains: .UserDomainMask).first as! NSURL
 private let _fileURL: NSURL = _documentsDirectoryURL.URLByAppendingPathComponent("TheMovieDB-Context")
 
 // MARK: - Config Class
@@ -36,7 +36,7 @@ class Config: NSObject, NSCoding {
     /* Returns the number days since the config was last updated */
     var daysSinceLastUpdate: Int? {
         
-        if let lastUpdate = dateUpdated? {
+        if let lastUpdate = dateUpdated {
             return Int(NSDate().timeIntervalSinceDate(lastUpdate)) / 60*60*24
         } else {
             return nil
@@ -83,7 +83,7 @@ class Config: NSObject, NSCoding {
     func updateIfDaysSinceUpdateExceeds(days: Int) {
         
         // If the config is up to date then return
-        if let daysSinceLastUpdate = daysSinceLastUpdate? {
+        if let daysSinceLastUpdate = daysSinceLastUpdate {
             if (daysSinceLastUpdate <= days) {
                 return
             }
@@ -97,7 +97,7 @@ class Config: NSObject, NSCoding {
         /* TASK: Get TheMovieDB configuration, and update the config */
         
         /* Grab the app delegate and session */
-        let appDelegate = UIApplication.sharedApplication().delegate as AppDelegate
+        let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
         let session = NSURLSession.sharedSession()
         
         /* 1. Set the parameters */
@@ -116,18 +116,18 @@ class Config: NSObject, NSCoding {
         /* 4. Make the request */
         let task = session.dataTaskWithRequest(request) { data, response, downloadError in
             
-            if let error = downloadError? {
+            if let error = downloadError {
                 println("Could not complete the request \(error)")
             } else {
                 
                 /* 5. Parse the data */
                 var parsingError: NSError? = nil
-                let parsedResult = NSJSONSerialization.JSONObjectWithData(data, options: NSJSONReadingOptions.AllowFragments, error: &parsingError) as NSDictionary
+                let parsedResult = NSJSONSerialization.JSONObjectWithData(data, options: NSJSONReadingOptions.AllowFragments, error: &parsingError) as! NSDictionary
                 
                 /* 6. Use the data! */
-                if let error = parsingError? {
+                if let error = parsingError {
                     println("Error updating config: \(error.localizedDescription)")
-                } else if let newConfig = Config(dictionary: parsedResult as [String : AnyObject]) {
+                } else if let newConfig = Config(dictionary: parsedResult as! [String : AnyObject]) {
                     appDelegate.config = newConfig
                     appDelegate.config.save()
                 } else {
@@ -149,10 +149,10 @@ class Config: NSObject, NSCoding {
     let DateUpdatedKey = "config.date_update_key"
     
     required init(coder aDecoder: NSCoder) {
-        baseImageURLString = aDecoder.decodeObjectForKey(BaseImageURLStringKey) as String
-        secureBaseImageURLString = aDecoder.decodeObjectForKey(SecureBaseImageURLStringKey) as String
-        posterSizes = aDecoder.decodeObjectForKey(PosterSizesKey) as [String]
-        profileSizes = aDecoder.decodeObjectForKey(ProfileSizesKey) as [String]
+        baseImageURLString = aDecoder.decodeObjectForKey(BaseImageURLStringKey) as! String
+        secureBaseImageURLString = aDecoder.decodeObjectForKey(SecureBaseImageURLStringKey) as! String
+        posterSizes = aDecoder.decodeObjectForKey(PosterSizesKey) as! [String]
+        profileSizes = aDecoder.decodeObjectForKey(ProfileSizesKey) as! [String]
         dateUpdated = aDecoder.decodeObjectForKey(DateUpdatedKey) as? NSDate
     }
     

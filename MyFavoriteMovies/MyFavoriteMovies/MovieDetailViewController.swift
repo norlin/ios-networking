@@ -47,7 +47,7 @@ class MovieDetailViewController: UIViewController {
         /* 7A. Start the request */
         
         /* TASK B: Get the poster image, then populate the image view */
-        if let posterPath = movie!.posterPath? {
+        if let posterPath = movie!.posterPath {
             
             /* 1B. Set the parameters */
             // There are none...
@@ -62,7 +62,7 @@ class MovieDetailViewController: UIViewController {
             /* 4B. Make the request */
             let task = session.dataTaskWithRequest(request) {data, response, downloadError in
                 
-                if let error = downloadError? {
+                if let error = downloadError {
                     println(error)
                 } else {
                     
@@ -70,7 +70,7 @@ class MovieDetailViewController: UIViewController {
                     // No need, the data is already raw image data.
                     
                     /* 6B. Use the data! */
-                    if let image = UIImage(data: data!)? {
+                    if let image = UIImage(data: data!) {
                         dispatch_async(dispatch_get_main_queue()) {
                             self.posterImageView!.image = image
                         }
