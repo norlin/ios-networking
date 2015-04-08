@@ -176,7 +176,7 @@ class ViewController: UIViewController {
             } else {
                 
                 var parsingError: NSError? = nil
-                let parsedResult = NSJSONSerialization.JSONObjectWithData(data, options: NSJSONReadingOptions.AllowFragments, error: &parsingError) as NSDictionary
+                let parsedResult = NSJSONSerialization.JSONObjectWithData(data, options: NSJSONReadingOptions.AllowFragments, error: &parsingError) as! NSDictionary
                 
                 if let photosDictionary = parsedResult.valueForKey("photos") as? [String:AnyObject] {
                     
@@ -211,7 +211,7 @@ class ViewController: UIViewController {
         let request = NSURLRequest(URL: url)
         
         let task = session.dataTaskWithRequest(request) {data, response, downloadError in
-            if let error = downloadError? {
+            if let error = downloadError {
                 println("Could not complete the request \(error)")
             } else {
                 var parsingError: NSError? = nil
