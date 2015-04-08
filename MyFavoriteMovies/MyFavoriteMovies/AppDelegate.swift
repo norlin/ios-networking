@@ -59,4 +59,5 @@ extension AppDelegate {
         
         return (!urlVars.isEmpty ? "?" : "") + join("&", urlVars)
     }
+    
 }
