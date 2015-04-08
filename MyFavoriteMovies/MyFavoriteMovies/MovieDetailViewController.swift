@@ -37,9 +37,7 @@ class MovieDetailViewController: UIViewController {
         
         super.viewWillAppear(animated)
         
-        println("viewWillAppear (MovieDetailViewController): implement me!")
-        
-        if let movie = movie {
+        if let movie = movie? {
             
             /* Setting some defaults ... */
             posterImageView.image = UIImage(named: "film342.png")
@@ -47,13 +45,65 @@ class MovieDetailViewController: UIViewController {
             unFavoriteButton.hidden = true
             
             /* TASK A: Get favorite movies, then update the favorite buttons */
+            
             /* 1A. Set the parameters */
+            let methodParameters = [
+                "api_key": appDelegate.apiKey,
+                "session_id": appDelegate.sessionID!
+            ]
+            
             /* 2A. Build the URL */
+            let urlString = appDelegate.baseURLSecureString + "account/\(appDelegate.userID!)/favorite/movies" + appDelegate.escapedParameters(methodParameters)
+            let url = NSURL(string: urlString)!
+            
             /* 3A. Configure the request */
+            let request = NSMutableURLRequest(URL: url)
+            request.addValue("application/json", forHTTPHeaderField: "Accept")
+            
             /* 4A. Make the request */
-            /* 5A. Parse the data */
-            /* 6A. Use the data! */
+            let task = session.dataTaskWithRequest(request) {data, response, downloadError in
+                
+                if let error = downloadError? {
+                    println("Could not complete the request \(error)")
+                } else {
+                    
+                    /* 5A. Parse the data */
+                    var parsingError: NSError? = nil
+                    let parsedResult = NSJSONSerialization.JSONObjectWithData(data, options: NSJSONReadingOptions.AllowFragments, error: &parsingError) as NSDictionary
+                    
+                    /* 6A. Use the data! */
+                    if let error = parsingError? {
+                        println(error)
+                    } else {
+                        if let results = parsedResult["results"] as? [[String : AnyObject]] {
+                            var isFavorite = false
+                            let movies = Movie.moviesFromResults(results)
+                            
+                            for movie in movies {
+                                if movie.id == self.movie!.id {
+                                    isFavorite = true
+                                }
+                            }
+                            
+                            dispatch_async(dispatch_get_main_queue()) {
+                                if isFavorite {
+                                    self.favoriteButton.hidden = true
+                                    self.unFavoriteButton.hidden = false
+                                } else {
+                                    self.favoriteButton.hidden = false
+                                    self.unFavoriteButton.hidden = true
+                                }
+                            }
+                            
+                        } else {
+                            println("Could not find results in \(parsedResult)")
+                        }
+                    }
+                }
+            }
+            
             /* 7A. Start the request */
+            task.resume()
             
             /* TASK B: Get the poster image, then populate the image view */
             if let posterPath = movie.posterPath {
