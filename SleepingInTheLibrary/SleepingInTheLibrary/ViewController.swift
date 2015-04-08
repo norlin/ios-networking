@@ -58,7 +58,7 @@ class ViewController: UIViewController {
         
         /* 4 - Initialize task for getting data */
         let task = session.dataTaskWithRequest(request) {data, response, downloadError in
-            if let error = downloadError? {
+            if let error = downloadError {
                 println("Could not complete the request \(error)")
             } else {
                 /* 5 - Success! Parse the data */
