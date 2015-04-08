@@ -37,15 +37,14 @@ class MovieDetailViewController: UIViewController {
         
         super.viewWillAppear(animated)
         
-        if let movie = movie {
+        /* TASK A: Get favorite movies, then update the favorite buttons */
+        if let movie = movie? {
             
             /* Setting some defaults ... */
             posterImageView.image = UIImage(named: "film342.png")
             titleLabel.text = movie.title
             unFavoriteButton.hidden = true
-            
-            /* TASK A: Get favorite movies, then update the favorite buttons */
-            
+
             /* 1A. Set the parameters */
             let methodParameters = [
                 "api_key": appDelegate.apiKey,
@@ -147,6 +146,8 @@ class MovieDetailViewController: UIViewController {
     
     @IBAction func unFavoriteButtonTouchUpInside(sender: AnyObject) {
         
+        println("unFavoriteButtonTouchUpInside: implement me!")
+        
         /* TASK: Remove movie as favorite, then update favorite buttons */
         /* 1. Set the parameters */
         /* 2. Build the URL */
@@ -158,6 +159,8 @@ class MovieDetailViewController: UIViewController {
     }
     
     @IBAction func favoriteButtonTouchUpInside(sender: AnyObject) {
+        
+        println("favoriteButtonTouchUpInside: implement me!")
         
         /* TASK: Add movie as favorite, then update favorite buttons */
         /* 1. Set the parameters */
