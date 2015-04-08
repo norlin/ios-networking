@@ -190,9 +190,9 @@ class LoginViewController: UIViewController {
                 /* 6. Use the data! */
                 if let success = parsedResult["success"] as? Bool {
                     if success {
-                        println("Login complete!")
+                        self.getSessionID(self.appDelegate.requestToken!)
                     } else {
-                        println("Login failed. Cannot find success in \(parsedResult)")
+                        println("Login failed.")
                     }
                 } else {
                     if let status_code = parsedResult["status_code"] as? Int {
@@ -214,8 +214,7 @@ class LoginViewController: UIViewController {
     }
     
     func getSessionID(requestToken: String) {
-        
-        
+                
         println("getSessionID: implement me!")
         
         /* TASK: Get a session ID, then store it (appDelegate.sessionID) and get the user's id */
