@@ -168,13 +168,13 @@ class MovieDetailViewController: UIViewController {
         /* 4. Make the request */
         let task = session.dataTaskWithRequest(request) { data, response, downloadError in
             
-            if let error = downloadError? {
+            if let error = downloadError {
                 println("Could not complete the request \(error)")
             } else {
                 
                 /* 5. Parse the data */
                 var parsingError: NSError? = nil
-                let parsedResult = NSJSONSerialization.JSONObjectWithData(data, options: NSJSONReadingOptions.AllowFragments, error: &parsingError) as NSDictionary
+                let parsedResult = NSJSONSerialization.JSONObjectWithData(data, options: NSJSONReadingOptions.AllowFragments, error: &parsingError) as! NSDictionary
                 
                 /* 6. Use the data! */
                 if let status_code = parsedResult["status_code"] as? Int {
@@ -220,13 +220,13 @@ class MovieDetailViewController: UIViewController {
         /* 4. Make the request */
         let task = session.dataTaskWithRequest(request) { data, response, downloadError in
             
-            if let error = downloadError? {
+            if let error = downloadError {
                 println("Could not complete the request \(error)")
             } else {
                 
                 /* 5. Parse the data */
                 var parsingError: NSError? = nil
-                let parsedResult = NSJSONSerialization.JSONObjectWithData(data, options: NSJSONReadingOptions.AllowFragments, error: &parsingError) as NSDictionary
+                let parsedResult = NSJSONSerialization.JSONObjectWithData(data, options: NSJSONReadingOptions.AllowFragments, error: &parsingError) as! NSDictionary
                 
                 /* 6. Use the data! */
                 if let status_code = parsedResult["status_code"] as? Int {
