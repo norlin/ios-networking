@@ -38,7 +38,7 @@ class MovieDetailViewController: UIViewController {
         super.viewWillAppear(animated)
         
         /* TASK A: Get favorite movies, then update the favorite buttons */
-        if let movie = movie? {
+        if let movie = movie {
             
             /* Setting some defaults ... */
             posterImageView.image = UIImage(named: "film342.png")
