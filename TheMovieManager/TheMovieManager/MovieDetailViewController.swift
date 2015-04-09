@@ -33,10 +33,10 @@ class MovieDetailViewController: UIViewController {
         self.activityIndicator.startAnimating()
         
         /* Set the UI, then check if the movie is a favorite/watchlist and update the buttons! */
-        if let movie = movie? {
+        if let movie = movie {
             
             /* Set the title */
-            if countElements(movie.releaseYear!) == 0 {
+            if count(movie.releaseYear!) == 0 {
                 self.navigationItem.title = "\(movie.title)"
             } else {
                 self.navigationItem.title = "\(movie.title) (\(movie.releaseYear!))"
@@ -50,7 +50,7 @@ class MovieDetailViewController: UIViewController {
             
             /* Is the movie a favorite? */
             TMDBClient.sharedInstance().getFavoriteMovies { movies, error in
-                if let movies = movies? {
+                if let movies = movies {
                     
                     for movie in movies {
                         if movie.id == self.movie!.id {
@@ -72,7 +72,7 @@ class MovieDetailViewController: UIViewController {
             
             /* Is the movie on the watchlist? */
             TMDBClient.sharedInstance().getWatchlistMovies { movies, error in
-                if let movies = movies? {
+                if let movies = movies {
                     
                     for movie in movies {
                         if movie.id == self.movie!.id {
@@ -93,9 +93,9 @@ class MovieDetailViewController: UIViewController {
             }
             
             /* Set the poster image */
-            if let posterPath = movie.posterPath? {
+            if let posterPath = movie.posterPath {
                 TMDBClient.sharedInstance().taskForGETImage(TMDBClient.PosterSizes.DetailPoster, filePath: posterPath, completionHandler: { (imageData, error) in
-                    if let image = UIImage(data: imageData!)? {
+                    if let image = UIImage(data: imageData!) {
                         dispatch_async(dispatch_get_main_queue()) {
                             self.activityIndicator.alpha = 0.0
                             self.activityIndicator.stopAnimating()

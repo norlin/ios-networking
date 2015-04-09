@@ -92,7 +92,7 @@ class TMDBConfig: NSObject, NSCoding {
         
         TMDBClient.sharedInstance().getConfig() { didSucceed, error in
             
-            if let error = error? {
+            if let error = error {
                 println("Error updating config: \(error.localizedDescription)")
             } else {
                 println("Updated Config: \(didSucceed)")

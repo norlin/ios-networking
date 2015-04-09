@@ -162,7 +162,7 @@ extension TMDBClient {
         taskForGETMethod(mutableMethod, parameters: parameters) { JSONResult, error in
             
             /* 3. Send the desired value(s) to completion handler */
-            if let error = error? {
+            if let error = error {
                 completionHandler(result: nil, error: error)
             } else {
                 
@@ -195,7 +195,7 @@ extension TMDBClient {
         let task = taskForGETMethod(Methods.SearchMovie, parameters: parameters) { JSONResult, error in
             
             /* 3. Send the desired value(s) to completion handler */
-            if let error = error? {
+            if let error = error {
                 completionHandler(result: nil, error: error)
             } else {
                 
@@ -222,9 +222,9 @@ extension TMDBClient {
         taskForGETMethod(Methods.Config, parameters: parameters) { JSONResult, error in
             
             /* 3. Send the desired value(s) to completion handler */
-            if let error = error? {
+            if let error = error {
                 completionHandler(didSucceed: false, error: error)
-            } else if let newConfig = TMDBConfig(dictionary: JSONResult as [String : AnyObject]) {
+            } else if let newConfig = TMDBConfig(dictionary: JSONResult as! [String : AnyObject]) {
                 self.config = newConfig
                 completionHandler(didSucceed: true, error: nil)
             } else {

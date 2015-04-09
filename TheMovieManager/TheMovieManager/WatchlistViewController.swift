@@ -52,9 +52,9 @@ class WatchlistViewController: UIViewController, UITableViewDelegate, UITableVie
         cell.imageView!.image = UIImage(named: "Film")
         cell.imageView!.contentMode = UIViewContentMode.ScaleAspectFit
         
-        if let posterPath = movie.posterPath? {
+        if let posterPath = movie.posterPath {
             TMDBClient.sharedInstance().taskForGETImage(TMDBClient.PosterSizes.RowPoster, filePath: posterPath, completionHandler: { (imageData, error) in
-                if let image = UIImage(data: imageData!)? {
+                if let image = UIImage(data: imageData!) {
                     dispatch_async(dispatch_get_main_queue()) {
                         cell.imageView!.image = image
                     }

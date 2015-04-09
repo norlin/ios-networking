@@ -72,7 +72,7 @@ class MoviePickerViewController: UIViewController, UITableViewDelegate, UITableV
         /* New search */
         searchTask = TMDBClient.sharedInstance().getMoviesForSearchString(searchText, completionHandler: { (movies, error) -> Void in
             self.searchTask = nil
-            if let movies = movies? {
+            if let movies = movies {
                 self.movies = movies
                 dispatch_async(dispatch_get_main_queue()) {
                     self.self.movieTableView!.reloadData()
