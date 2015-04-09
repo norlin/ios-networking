@@ -116,7 +116,7 @@ extension TMDBClient {
         taskForGETMethod(Methods.AuthenticationSessionNew, parameters: parameters) { JSONResult, error in
             
             /* 3. Send the desired value(s) to completion handler */
-            if let error = error? {
+            if let error = error {
                 completionHandler(success: false, sessionID: nil, errorString: "Login Failed (Session ID).")
             } else {
                 if let sessionID = JSONResult.valueForKey(TMDBClient.JSONResponseKeys.SessionID) as? String {
@@ -137,7 +137,7 @@ extension TMDBClient {
         taskForGETMethod(Methods.Account, parameters: parameters) { JSONResult, error in
             
             /* 3. Send the desired value(s) to completion handler */
-            if let error = error? {
+            if let error = error {
                 completionHandler(success: false, userID: nil, errorString: "Login Failed (User ID).")
             } else {
                 if let userID = JSONResult.valueForKey(TMDBClient.JSONResponseKeys.UserID) as? Int {
