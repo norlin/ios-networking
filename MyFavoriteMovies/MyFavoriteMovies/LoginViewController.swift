@@ -232,7 +232,7 @@ class LoginViewController: UIViewController {
         /* 4. Make the request */
         let task = session.dataTaskWithRequest(request) { data, response, downloadError in
             
-            if let error = downloadError? {
+            if let error = downloadError {
                 dispatch_async(dispatch_get_main_queue()) {
                     self.debugTextLabel.text = "Login Failed (Session ID)."
                 }
@@ -241,7 +241,7 @@ class LoginViewController: UIViewController {
                 
                 /* 5. Parse the data */
                 var parsingError: NSError? = nil
-                let parsedResult = NSJSONSerialization.JSONObjectWithData(data, options: NSJSONReadingOptions.AllowFragments, error: &parsingError) as NSDictionary
+                let parsedResult = NSJSONSerialization.JSONObjectWithData(data, options: NSJSONReadingOptions.AllowFragments, error: &parsingError) as! NSDictionary
                 
                 /* 6. Use the data! */
                 if let sessionID = parsedResult["session_id"] as? String {
