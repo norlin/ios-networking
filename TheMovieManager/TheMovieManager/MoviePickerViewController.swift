@@ -58,7 +58,7 @@ class MoviePickerViewController: UIViewController, UITableViewDelegate, UITableV
     func searchBar(searchBar: UISearchBar, textDidChange searchText: String) {
         
         /* Cancel the last task */
-        if let task = searchTask? {
+        if let task = searchTask {
             task.cancel()
         }
         
@@ -83,9 +83,9 @@ class MoviePickerViewController: UIViewController, UITableViewDelegate, UITableV
         
         let CellReuseId = "MovieSearchCell"
         let movie = movies[indexPath.row]
-        let cell = tableView.dequeueReusableCellWithIdentifier(CellReuseId) as UITableViewCell
+        let cell = tableView.dequeueReusableCellWithIdentifier(CellReuseId) as! UITableViewCell
         
-        if countElements(movie.releaseYear!) == 0 {
+        if count(movie.releaseYear!) == 0 {
             cell.textLabel!.text = "\(movie.title)"
         } else {
             cell.textLabel!.text = "\(movie.title) (\(movie.releaseYear!))"
@@ -101,7 +101,7 @@ class MoviePickerViewController: UIViewController, UITableViewDelegate, UITableV
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         
         let movie = movies[indexPath.row]
-        let controller = self.storyboard!.instantiateViewControllerWithIdentifier("MovieDetailViewController") as MovieDetailViewController
+        let controller = self.storyboard!.instantiateViewControllerWithIdentifier("MovieDetailViewController") as! MovieDetailViewController
         controller.movie = movie
         self.navigationController!.pushViewController(controller, animated: true)
     }

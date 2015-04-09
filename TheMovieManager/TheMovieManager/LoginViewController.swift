@@ -23,7 +23,7 @@ class LoginViewController: UIViewController {
         super.viewDidLoad()
         
         /* Get the app delegate */
-        appDelegate = UIApplication.sharedApplication().delegate as AppDelegate
+        appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
         
         /* Get the shared URL session */
         session = NSURLSession.sharedSession()
@@ -75,7 +75,7 @@ class LoginViewController: UIViewController {
         /* 4. Make the request */
         let task = session.dataTaskWithRequest(request) { data, response, downloadError in
             
-            if let error = downloadError? {
+            if let error = downloadError {
                 dispatch_async(dispatch_get_main_queue()) {
                     self.debugTextLabel.text = "Login Failed (Request Token)."
                 }
@@ -84,7 +84,7 @@ class LoginViewController: UIViewController {
                 
                 /* 5. Parse the data */
                 var parsingError: NSError? = nil
-                let parsedResult = NSJSONSerialization.JSONObjectWithData(data, options: NSJSONReadingOptions.AllowFragments, error: &parsingError) as NSDictionary
+                let parsedResult = NSJSONSerialization.JSONObjectWithData(data, options: NSJSONReadingOptions.AllowFragments, error: &parsingError) as! NSDictionary
                 
                 /* 6. Use the data! */
                 if let requestToken = parsedResult["request_token"] as? String {
@@ -114,7 +114,7 @@ class LoginViewController: UIViewController {
         
         let authorizationURL = NSURL(string: "\(TMDBClient.Constants.AuthorizationURL)\(requestToken!)")
         let request = NSURLRequest(URL: authorizationURL!)
-        let webAuthViewController = hostViewController.storyboard!.instantiateViewControllerWithIdentifier("TMDBAuthViewController") as TMDBAuthViewController
+        let webAuthViewController = hostViewController.storyboard!.instantiateViewControllerWithIdentifier("TMDBAuthViewController") as! TMDBAuthViewController
         webAuthViewController.urlRequest = request
         webAuthViewController.requestToken = requestToken
         webAuthViewController.completionHandler = completionHandler
@@ -146,7 +146,7 @@ class LoginViewController: UIViewController {
         /* 4. Make the request */
         let task = session.dataTaskWithRequest(request) { data, response, downloadError in
             
-            if let error = downloadError? {
+            if let error = downloadError {
                 dispatch_async(dispatch_get_main_queue()) {
                     self.debugTextLabel.text = "Login Failed (Session ID)."
                 }
@@ -155,7 +155,7 @@ class LoginViewController: UIViewController {
                 
                 /* 5. Parse the data */
                 var parsingError: NSError? = nil
-                let parsedResult = NSJSONSerialization.JSONObjectWithData(data, options: NSJSONReadingOptions.AllowFragments, error: &parsingError) as NSDictionary
+                let parsedResult = NSJSONSerialization.JSONObjectWithData(data, options: NSJSONReadingOptions.AllowFragments, error: &parsingError) as! NSDictionary
                 
                 /* 6. Use the data! */
                 if let sessionID = parsedResult["session_id"] as? String {
@@ -195,7 +195,7 @@ class LoginViewController: UIViewController {
         /* 4. Make the request */
         let task = session.dataTaskWithRequest(request) { data, response, downloadError in
             
-            if let error = downloadError? {
+            if let error = downloadError {
                 dispatch_async(dispatch_get_main_queue()) {
                     self.debugTextLabel.text = "Login Failed (User ID)."
                 }
@@ -204,7 +204,7 @@ class LoginViewController: UIViewController {
                 
                 /* 5. Parse the data */
                 var parsingError: NSError? = nil
-                let parsedResult = NSJSONSerialization.JSONObjectWithData(data, options: NSJSONReadingOptions.AllowFragments, error: &parsingError) as NSDictionary
+                let parsedResult = NSJSONSerialization.JSONObjectWithData(data, options: NSJSONReadingOptions.AllowFragments, error: &parsingError) as! NSDictionary
                 
                 /* 6. Use the data! */
                 if let userID = parsedResult["id"] as? Int {
@@ -229,14 +229,14 @@ class LoginViewController: UIViewController {
     func completeLogin() {
         dispatch_async(dispatch_get_main_queue(), {
             self.debugTextLabel.text = ""
-            let controller = self.storyboard!.instantiateViewControllerWithIdentifier("ManagerNavigationController") as UINavigationController
+            let controller = self.storyboard!.instantiateViewControllerWithIdentifier("ManagerNavigationController") as! UINavigationController
             self.presentViewController(controller, animated: true, completion: nil)
         })
     }
     
     func displayError(errorString: String?) {
         dispatch_async(dispatch_get_main_queue(), {
-            if let errorString = errorString? {
+            if let errorString = errorString {
                 self.debugTextLabel.text = errorString
             }
         })

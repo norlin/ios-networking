@@ -36,7 +36,7 @@ class FavoritesViewController: UIViewController, UITableViewDelegate, UITableVie
         /* Get cell type */
         let cellReuseIdentifier = "FavoriteTableViewCell"
         let movie = movies[indexPath.row]
-        var cell = tableView.dequeueReusableCellWithIdentifier(cellReuseIdentifier) as UITableViewCell
+        var cell = tableView.dequeueReusableCellWithIdentifier(cellReuseIdentifier) as! UITableViewCell
         
         /* Set cell defaults */
         cell.textLabel!.text = movie.title
@@ -55,7 +55,7 @@ class FavoritesViewController: UIViewController, UITableViewDelegate, UITableVie
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         
         /* Push the movie detail view */
-        let controller = self.storyboard!.instantiateViewControllerWithIdentifier("MovieDetailViewController") as MovieDetailViewController
+        let controller = self.storyboard!.instantiateViewControllerWithIdentifier("MovieDetailViewController") as! MovieDetailViewController
         controller.movie = movies[indexPath.row]
         self.navigationController!.pushViewController(controller, animated: true)
     }
