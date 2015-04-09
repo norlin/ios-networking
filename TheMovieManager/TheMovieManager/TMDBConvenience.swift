@@ -45,7 +45,7 @@ extension TMDBClient {
         taskForGETMethod(Methods.AuthenticationTokenNew, parameters: parameters) { JSONResult, error in
             
             /* 3. Send the desired value(s) to completion handler */
-            if let error = error? {
+            if let error = error {
                 completionHandler(success: false, requestToken: nil, errorString: "Login Failed (Request Token).")
             } else {
                 if let requestToken = JSONResult.valueForKey(TMDBClient.JSONResponseKeys.RequestToken) as? String {
