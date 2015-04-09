@@ -72,7 +72,7 @@ extension TMDBClient {
         
         let authorizationURL = NSURL(string: "\(TMDBClient.Constants.AuthorizationURL)\(requestToken!)")
         let request = NSURLRequest(URL: authorizationURL!)
-        let webAuthViewController = hostViewController.storyboard!.instantiateViewControllerWithIdentifier("TMDBAuthViewController") as TMDBAuthViewController
+        let webAuthViewController = hostViewController.storyboard!.instantiateViewControllerWithIdentifier("TMDBAuthViewController") as! TMDBAuthViewController
         webAuthViewController.urlRequest = request
         webAuthViewController.requestToken = requestToken
         webAuthViewController.completionHandler = completionHandler
