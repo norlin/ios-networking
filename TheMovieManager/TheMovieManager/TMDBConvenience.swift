@@ -45,7 +45,7 @@ extension TMDBClient {
                                     
                                     if success {
                                         
-                                        if let userID = userID? {
+                                        if let userID = userID {
                                             
                                             /* And the userID 😄! */
                                             self.userID = userID
