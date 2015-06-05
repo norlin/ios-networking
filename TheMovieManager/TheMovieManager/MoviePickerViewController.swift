@@ -85,10 +85,10 @@ class MoviePickerViewController: UIViewController, UITableViewDelegate, UITableV
         let movie = movies[indexPath.row]
         let cell = tableView.dequeueReusableCellWithIdentifier(CellReuseId) as! UITableViewCell
         
-        if count(movie.releaseYear!) == 0 {
-            cell.textLabel!.text = "\(movie.title)"
+        if let releaseYear = movie.releaseYear {
+            cell.textLabel!.text = "\(movie.title) (\(releaseYear))"
         } else {
-            cell.textLabel!.text = "\(movie.title) (\(movie.releaseYear!))"
+            cell.textLabel!.text = "\(movie.title)"
         }
         
         return cell
