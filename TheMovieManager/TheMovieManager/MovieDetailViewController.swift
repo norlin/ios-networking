@@ -36,13 +36,11 @@ class MovieDetailViewController: UIViewController {
         if let movie = movie {
             
             /* Set the title */
-            if count(movie.releaseYear!) == 0 {
-                self.navigationItem.title = "\(movie.title)"
+            if let releaseYear = movie.releaseYear {
+                self.navigationItem.title = "\(movie.title) (\(releaseYear))"
             } else {
-                self.navigationItem.title = "\(movie.title) (\(movie.releaseYear!))"
+                self.navigationItem.title = "\(movie.title)"
             }
-            
-            self.navigationItem.title = movie.title
             
             /* Setting some default UI ... */
             posterImageView.image = UIImage(named: "MissingPoster")
