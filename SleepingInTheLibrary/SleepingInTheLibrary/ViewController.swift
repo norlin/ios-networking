@@ -28,6 +28,7 @@ class ViewController: UIViewController {
     
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
+        getImageFrom500px()
     }
 
     override func didReceiveMemoryWarning() {
@@ -46,7 +47,6 @@ class ViewController: UIViewController {
         let session = NSURLSession.sharedSession()
         let urlString = BASE_URL + METHOD_NAME + escapedParameters(methodArguments)
         let url = NSURL(string: urlString)!
-        println(url)
         let request = NSURLRequest(URL: url)
         
         /* 4 - Initialize task for getting data */
@@ -63,9 +63,9 @@ class ViewController: UIViewController {
                         if photoArray.count > 0 {
                             let randomPhotoIndex = Int(arc4random_uniform(UInt32(photoArray.count)))
                             let photoDictionary = photoArray[randomPhotoIndex] as! [String: AnyObject]
-
+                            println(photoDictionary)
                             /* 7 - Get the image url and title */
-                            let photoTitle = photoDictionary["title"] as? String
+                            let photoTitle = photoDictionary["name"] as? String
                             let imageUrlString = photoDictionary["image_url"] as? String
                             let imageURL = NSURL(string: imageUrlString!)
                             
