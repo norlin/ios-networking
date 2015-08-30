@@ -38,8 +38,7 @@ class ViewController: UIViewController {
         
         /* 2 - API method arguments */
         let methodArguments = [
-            "tag": "sleeping",
-            "only": "People",
+            "term": "sleeping in a library",
             "consumer_key": API_KEY
         ]
         
@@ -64,8 +63,6 @@ class ViewController: UIViewController {
                         if photoArray.count > 0 {
                             let randomPhotoIndex = Int(arc4random_uniform(UInt32(photoArray.count)))
                             let photoDictionary = photoArray[randomPhotoIndex] as! [String: AnyObject]
-
-                            println(photoDictionary)
 
                             /* 7 - Get the image url and title */
                             let photoTitle = photoDictionary["title"] as? String
