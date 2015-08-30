@@ -63,7 +63,6 @@ class ViewController: UIViewController {
                         if photoArray.count > 0 {
                             let randomPhotoIndex = Int(arc4random_uniform(UInt32(photoArray.count)))
                             let photoDictionary = photoArray[randomPhotoIndex] as! [String: AnyObject]
-                            println(photoDictionary)
                             /* 7 - Get the image url and title */
                             let photoTitle = photoDictionary["name"] as? String
                             let imageUrlString = photoDictionary["image_url"] as? String
