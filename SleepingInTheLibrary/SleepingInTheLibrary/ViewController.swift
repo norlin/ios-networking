@@ -9,13 +9,9 @@
 import UIKit
 
 /* 1 - Define constants */
-let BASE_URL = "https://api.flickr.com/services/rest/"
-let METHOD_NAME = "flickr.galleries.getPhotos"
-let API_KEY = "ENTER_YOUR_API_KEY_HERE"
-let GALLERY_ID = "5704-72157622566655097"
-let EXTRAS = "url_m"
-let DATA_FORMAT = "json"
-let NO_JSON_CALLBACK = "1"
+let BASE_URL = "https://api.500px.com/v1"
+let METHOD_NAME = "/photos/search"
+let API_KEY = "YOUR_500px_API_WITHOUT_FU*CKING_YAHOO"
 
 class ViewController: UIViewController {
  
@@ -23,7 +19,7 @@ class ViewController: UIViewController {
     @IBOutlet weak var photoTitle: UILabel!
     
     @IBAction func touchRefreshButton(sender: AnyObject) {
-        getImageFromFlickr()
+        getImageFrom500px()
     }
     
     override func viewDidLoad() {
@@ -38,22 +34,20 @@ class ViewController: UIViewController {
         super.didReceiveMemoryWarning()
     }
 
-    func getImageFromFlickr() {
+    func getImageFrom500px() {
         
         /* 2 - API method arguments */
         let methodArguments = [
-            "method": METHOD_NAME,
-            "api_key": API_KEY,
-            "gallery_id": GALLERY_ID,
-            "extras": EXTRAS,
-            "format": DATA_FORMAT,
-            "nojsoncallback": NO_JSON_CALLBACK
+            "tag": "sleeping",
+            "only": "People",
+            "consumer_key": API_KEY
         ]
         
         /* 3 - Initialize session and url */
         let session = NSURLSession.sharedSession()
-        let urlString = BASE_URL + escapedParameters(methodArguments)
+        let urlString = BASE_URL + METHOD_NAME + escapedParameters(methodArguments)
         let url = NSURL(string: urlString)!
+        println(url)
         let request = NSURLRequest(URL: url)
         
         /* 4 - Initialize task for getting data */
@@ -64,31 +58,32 @@ class ViewController: UIViewController {
                 /* 5 - Success! Parse the data */
                 var parsingError: NSError? = nil
                 let parsedResult: AnyObject! = NSJSONSerialization.JSONObjectWithData(data, options: NSJSONReadingOptions.AllowFragments, error: &parsingError)
-                
-                if let photosDictionary = parsedResult.valueForKey("photos") as? NSDictionary {
-                    if let photoArray = photosDictionary.valueForKey("photo") as? [[String: AnyObject]] {
+                if let photoArray = parsedResult.valueForKey("photos") as? NSArray {
                         
                         /* 6 - Grab a single, random image */
-                        let randomPhotoIndex = Int(arc4random_uniform(UInt32(photoArray.count)))
-                        let photoDictionary = photoArray[randomPhotoIndex] as [String: AnyObject]
+                        if photoArray.count > 0 {
+                            let randomPhotoIndex = Int(arc4random_uniform(UInt32(photoArray.count)))
+                            let photoDictionary = photoArray[randomPhotoIndex] as! [String: AnyObject]
 
-                        /* 7 - Get the image url and title */
-                        let photoTitle = photoDictionary["title"] as? String
-                        let imageUrlString = photoDictionary["url_m"] as? String
-                        let imageURL = NSURL(string: imageUrlString!)
-                        
-                        /* 8 - If an image exists at the url, set the image and title */
-                        if let imageData = NSData(contentsOfURL: imageURL!) {
-                            dispatch_async(dispatch_get_main_queue(), {
-                                self.photoImageView.image = UIImage(data: imageData)
-                                self.photoTitle.text = photoTitle
-                            })
+                            println(photoDictionary)
+
+                            /* 7 - Get the image url and title */
+                            let photoTitle = photoDictionary["title"] as? String
+                            let imageUrlString = photoDictionary["image_url"] as? String
+                            let imageURL = NSURL(string: imageUrlString!)
+                            
+                            /* 8 - If an image exists at the url, set the image and title */
+                            if let imageData = NSData(contentsOfURL: imageURL!) {
+                                dispatch_async(dispatch_get_main_queue(), {
+                                    self.photoImageView.image = UIImage(data: imageData)
+                                    self.photoTitle.text = photoTitle
+                                })
+                            } else {
+                                println("Image does not exist at \(imageURL)")
+                            }
                         } else {
-                            println("Image does not exist at \(imageURL)")
+                            println("Found zero photos!")
                         }
-                    } else {
-                        println("Cant find key 'photo' in \(photosDictionary)")
-                    }
                 } else {
                     println("Cant find key 'photos' in \(parsedResult)")
                 }
